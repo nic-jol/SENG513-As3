@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+     
+    <style> 
+      * { 
+        margin: 0; 
+        padding: 0; 
+        box-sizing: border-box; 
+        background: #4f5b5a;
+      }
+      #background {
+        background: #4f5b5a;
+      }
+
+      body { 
+        font: 13px Helvetica, Arial; 
+      }
+      form { 
+        background-color: #000; 
+        padding: 3px; 
+        position: fixed; 
+        bottom: 0; 
+        width: 100%; 
+      }
+      form input { 
+        border: 0; 
+        padding: 10px; 
+        width: 90%; 
+        margin-right: .5%; 
+      }
+      
+      form button { 
+        width: 9%; 
+        border-right-width: 0px;
+        background: #ff2e00; 
+        border: none; 
+        padding: 10px; 
+      }
+      
+      #messages { 
+        list-style-type: none; 
+        margin: 0; 
+        padding: 0; 
+      }
+      #messages li { 
+        padding: 5px 10px; 
+      }
+      #names {
+        margin: 0;
+        list-style-type: none; 
+      }
+    </style>
+  </head>
+  <body>
+    <div id="background" class="container-fluid">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8">
+            <!-- contains chat msgs-->
+            <ul id="messages"></ul>
+          </div>
+          <div class="col-sm-4">
+            <ul id="names">
+              <li>Name1</li>
+              <li>Name2</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <form action="">
+          <input id="m" autocomplete="off" />
+          <button>Send</button>
+        </form>
+      </div>
+    </div>
+    
+    
+    <!--<button>Send</button> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(function () {
+            var socket = io();
+            $('form').submit(function(){
+                socket.emit('chat message', $('#m').val());
+                $('#m').val('');
+                return false;
+            });
+            socket.on('chat message', function(msg){
+                $('#messages').append($('<li>').text(msg));
+            });
+            
+            //socket.on('connect', function)
+        });
+    </script>
+  </body>
+</html>

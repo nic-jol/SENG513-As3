@@ -1,4 +1,9 @@
 // SERVER
+/*
+    Name: Nicole Lefebvre
+    ID: 10055118
+    Tutorial: B03
+*/
 
 //Express initializes app to be a function handler that you can supply to an HTTP server
 var app = require('express')();    // Run right away; import and run

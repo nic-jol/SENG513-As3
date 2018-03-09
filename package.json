@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "description": "As3-Chat app",
     "dependencies": {
+        "cookie-parser": "^1.4.3",
         "express": "^4.15.2",
         "socket.io": "^2.0.4"
     }

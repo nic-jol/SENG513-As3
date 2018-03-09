@@ -33,6 +33,8 @@
       background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);
       border: 5px inset rgb(172, 99, 168);/* #ff3200;*/
       border-radius: 5px;
+      overflow-y: auto;
+      
     }
 
     #nameColumn {
@@ -42,11 +44,11 @@
       /*line-height: 500px;*/
       /*background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);*/
       /*background-color: rgb(17, 2, 0);*/
-      /*background: linear-gradient(to bottom right, rgb(17, 2, 0), rgb(63, 36, 71));*/
+      /*background: linear-gradient(to bottom right, rgb(17, overflow-y: auto;2, 0), rgb(63, 36, 71));*/
       background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);
       border: 5px inset rgb(172, 99, 168);
       border-radius: 5px;
-      
+      overflow-y: auto;
     }
 
     #messages {
@@ -54,12 +56,12 @@
       margin: 0;
       padding: 0;
       width: 100%;
+      overflow-y: auto;
     }
 
     ul {
       overflow-y: auto;
-      overflow: auto;
-      max-height: 81vh;
+      /*max-height: 81vh;*/
       min-height: 81vh;
       display: flex;
       flex: 1;
@@ -74,12 +76,14 @@
 
     #messages li {
       padding: 5px 10px;
+      /*overflow-y: auto;*/
     }
 
     #names {
       margin: 0;
       padding: 0;
       list-style-type: none;
+      overflow-y: auto;
     }
 
     p {

@@ -86,13 +86,17 @@
         socket.on('connect', () => {
           // emitting to everybody
           socket.emit('message', 'user connected');
-        })
+        });
 
         // Wait for a message - can be for connect, disconnect, or sending a message
-        socket.on('message', (msg) => {
+          socket.on('message', (msg) => {
           // changing the messages ul; put message in
-          $('#messages').append($('<li>').text(msg));
-        })
+          console.log("\nmessage:");
+          console.log(msg);
+          console.log("\n");
+          //$('#messages').append($('<li>').html(msg));
+          $('#messages').append(msg);
+        });
     </script>
   </body>
 </html>

@@ -103,6 +103,11 @@ io.on('connection', function (socket) {
     // Update user list
     updateUserList();
 
+    // Display username
+    socket.emit('displayUsername', ("You are " + user["name"]));
+    //socket.broadcast.to(socket.id).emit('displayUsername', ("You are " + user["name"]));
+
+
     socket.on('message', (msg) => {
         // timestamp
         let fullDate = Date().split(" ");
@@ -116,7 +121,7 @@ io.on('connection', function (socket) {
             console.log("change name request");
             let oldname = user["name"];
 
-            if ((possibleRequest.length > 1) && !(possibleRequest[1].trim() in allUsers)) { // Make sure there is a name to change it to and that there isn't already a user with that name
+            if ((possibleRequest.length > 1) && !(possibleRequest[1].trim() in allUsers) && !(possibleRequest[1].trim() != " ")) { // Make sure there is a name to change it to and that there isn't already a user with that name
                 user["name"] = possibleRequest[1].trim();
                 console.log(user);
 
@@ -131,6 +136,9 @@ io.on('connection', function (socket) {
 
                 // Update user list
                 updateUserList();
+
+                // Display username
+                socket.emit('displayUsername', ("You are " + user["name"]));
             }
             else {
                 io.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "'s name change not successful" + "</li>"));

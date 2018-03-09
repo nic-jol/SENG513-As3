@@ -1,111 +1,140 @@
 <!doctype html>
 <!-- CLIENT -->
 <html>
-  <head>
-    <title>Chat Room</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <style> 
-      form {
-        padding: 20px;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        padding-right: 50px;
-      }
+<head>
+  <title>Chat Room</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
 
-      #messages {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
+  <style>
+    form {
+      padding: 20px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding-right: 50px;
+    }
 
-      #messages li {
-        padding: 5px 10px;
-      }
-      #names {
-        margin: 0;
-        padding: 0;
-        list-style-type: none; 
-      }
-    </style>
-  </head>
+    #messages {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
 
-  <body>
-    <div id="username">
+    #messages li {
+      padding: 5px 10px;
+    }
 
-    </div>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-8">
-          <ul id="messages"></ul>
+    #names {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+      font-weight: bold;
+      font-size: 1.2 rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="text-center">
+          <p id="username"> </p>
         </div>
-        <div class="col-sm-4">
-            <ul id="names"></ul>
+      </div>
+      <div class="col-sm-4">
+          <div class="text-center">
+            <p>Current Users:</p>
           </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-6">
-          <form action="">
-            <div class="input-group mb-3">
-              <input id="m" autocomplete="off" type="text" class="form-control" placeholder="Message..." aria-label="Message..." aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit">Send</button>
-              </div>
-            </div>
-          </form>
         </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8">
+        <ul id="messages"></ul>
+      </div>
+      <div class="col-sm-4">
+        <ul id="names"></ul>
       </div>
     </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <form action="">
+          <div class="input-group mb-3">
+            <input id="m" autocomplete="off" type="text" class="form-control" placeholder="Message..." aria-label="Message..." aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="submit">Send</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
-    <!-- <script src="server.js"> -->
-    <script> 
-        // How to connect to server 
-        //const socket = io.connect('http://localhost:3000');
-        const socket = io();
-        
-        // When submit happens for the form
-        // Send a message
-        $('form').submit(() => {
-          // Take input from m
-          socket.emit('message', $('#m').val());
-          $('#m').val('');  // empty form
-          return false;
-        });
+  <!-- <script src="server.js"> -->
+  <script> 
+    // How to connect to server 
+    //const socket = io.connect('http://localhost:3000');
+    const socket = io();
 
-        // some events reserved by API
-        socket.on('connect', () => {
-          // emitting to everybody
-          socket.emit('message', 'user connected');
-        });
+    // When submit happens for the form
+    // Send a message
+    $('form').submit(() => {
+      // Take input from m
+      socket.emit('message', $('#m').val());
+      $('#m').val('');  // empty form
+      return false;
+    });
 
-        // Wait for a message - can be for connect, disconnect, or sending a message
-        socket.on('message', (msg) => {
-          // changing the messages ul; put message in
-          console.log("\nmessage:");
-          console.log(msg);
-          console.log("\n");
-          //$('#messages').append($('<li>').html(msg));
-          $('#messages').append(msg);
-        });
+    // some events reserved by API
+    socket.on('connect', () => {
+      // emitting to everybody
+      socket.emit('message', 'user connected');
+    });
 
-        socket.on('updateUsers', (msg) => {
-          let listUsers = msg.split(" ");
-          $('#names').empty();
+    // Wait for a message - can be for connect, disconnect, or sending a message
+    socket.on('message', (msg) => {
+      // changing the messages ul; put message in
+      //console.log("\nmessage:");
+      //console.log(msg);
+      //console.log("\n");
+      //$('#messages').append($('<li>').html(msg));
+      $('#messages').append(msg);
+    });
 
-          for (let i=0; i< listUsers.length; i++) {
-            $('#names').append(listUsers[i]);
-          }
-        })
-    </script>
-  </body>
+    socket.on('updateUsers', (msg) => {
+      let listUsers = msg.split(" ");
+      $('#names').empty();
+
+      for (let i = 0; i < listUsers.length; i++) {
+        $('#names').append(listUsers[i]);
+      }
+    });
+
+    socket.on('displayUsername', (msg) => {
+      document.getElementById('username').innerText = msg;
+
+      console.log(msg);
+    });
+  </script>
+</body>
+
 </html>

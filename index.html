@@ -35,16 +35,16 @@
   </head>
 
   <body>
+    <div id="username">
+
+    </div>
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-8">
           <ul id="messages"></ul>
         </div>
         <div class="col-sm-4">
-            <ul id="names">
-              <li>Name1</li>
-              <li>Name2</li>
-            </ul>
+            <ul id="names"></ul>
           </div>
       </div>
       <div class="row">
@@ -89,7 +89,7 @@
         });
 
         // Wait for a message - can be for connect, disconnect, or sending a message
-          socket.on('message', (msg) => {
+        socket.on('message', (msg) => {
           // changing the messages ul; put message in
           console.log("\nmessage:");
           console.log(msg);
@@ -97,6 +97,15 @@
           //$('#messages').append($('<li>').html(msg));
           $('#messages').append(msg);
         });
+
+        socket.on('updateUsers', (msg) => {
+          let listUsers = msg.split(" ");
+          $('#names').empty();
+
+          for (let i=0; i< listUsers.length; i++) {
+            $('#names').append(listUsers[i]);
+          }
+        })
     </script>
   </body>
 </html>

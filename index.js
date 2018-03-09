@@ -65,7 +65,7 @@ io.on('connection', function (socket) {
 
         do {   // Make sure it isn't aldready in allUsers
             let num1 = Math.round(Math.random() * 9);
-            let num2 = Math.round(Math.random()* 9);
+            let num2 = Math.round(Math.random() * 9);
 
             //console.log("Num1: " + num1);
             //console.log("Num2: " + num2);
@@ -100,15 +100,14 @@ io.on('connection', function (socket) {
 
     }
 
+    // Update user list
+    updateUserList();
 
     socket.on('message', (msg) => {
         // timestamp
         let fullDate = Date().split(" ");
         let withSeconds = fullDate[4].split(':');
         let rightTime = withSeconds[0] + ":" + withSeconds[1];
-
-        // Parse message
-
 
         // Change nickname or change in color requested/nick <new nickname>
         let possibleRequest = msg.split(" ");
@@ -122,6 +121,16 @@ io.on('connection', function (socket) {
                 console.log(user);
 
                 io.emit('message', ("<li>" + rightTime + " " + oldname + " changed their name to " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "." + "</li>"));
+
+                // TODO: remove old name from list and add to allUsers
+                // Add name to global users array
+                allUsers[user["name"]] = user["color"];
+
+                // Remove other instance
+                delete allUsers[oldname];               
+
+                // Update user list
+                updateUserList();
             }
             else {
                 io.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "'s name change not successful" + "</li>"));
@@ -155,22 +164,21 @@ io.on('connection', function (socket) {
         let rightTime = withSeconds[0] + ":" + withSeconds[1];
 
         // Remove nickname from allUsers
+        delete allUsers[user["name"]]; 
+
+        // Update user list
+        updateUserList();
 
         // Better message
         console.log("user disconnected");
         io.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " has left the chat room." + "</li>"));
-
-
-
-        // use io since server - emitting from server (io)
-        //io.emit('message', 'user disconnected');
     })
 
 });
 
 function all0ToF(str) {
     str = str.toLowerCase();
-    for (let i= 0; i < 6; i++) {
+    for (let i = 0; i < 6; i++) {
         let letterCode = str.charCodeAt(i);
 
         if ((letterCode < 48) || (letterCode > 57 && letterCode < 97) || (letterCode > 102)) {
@@ -180,6 +188,17 @@ function all0ToF(str) {
 
     return true;
 }
+
+// Update user list
+function updateUserList() {
+    let strUsers = "";
+    for (let key in allUsers) {
+        strUsers = strUsers + "<li>" + key + "</li> ";
+    }
+    console.log(strUsers);
+    io.emit('updateUsers', strUsers);
+}
+
 
 /*    
     // Send to all

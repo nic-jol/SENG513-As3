@@ -1,103 +1,98 @@
 <!doctype html>
+<!-- CLIENT -->
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Chat Room</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-     
+
     <style> 
-      * { 
-        margin: 0; 
-        padding: 0; 
-        box-sizing: border-box; 
-        background: #4f5b5a;
-      }
-      #background {
-        background: #4f5b5a;
+      form {
+        padding: 20px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding-right: 50px;
       }
 
-      body { 
-        font: 13px Helvetica, Arial; 
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
       }
-      form { 
-        background-color: #000; 
-        padding: 3px; 
-        position: fixed; 
-        bottom: 0; 
-        width: 100%; 
-      }
-      form input { 
-        border: 0; 
-        padding: 10px; 
-        width: 90%; 
-        margin-right: .5%; 
-      }
-      
-      form button { 
-        width: 9%; 
-        border-right-width: 0px;
-        background: #ff2e00; 
-        border: none; 
-        padding: 10px; 
-      }
-      
-      #messages { 
-        list-style-type: none; 
-        margin: 0; 
-        padding: 0; 
-      }
-      #messages li { 
-        padding: 5px 10px; 
+
+      #messages li {
+        padding: 5px 10px;
       }
       #names {
         margin: 0;
+        padding: 0;
         list-style-type: none; 
       }
     </style>
   </head>
+
   <body>
-    <div id="background" class="container-fluid">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-8">
-            <!-- contains chat msgs-->
-            <ul id="messages"></ul>
-          </div>
-          <div class="col-sm-4">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-8">
+          <ul id="messages"></ul>
+        </div>
+        <div class="col-sm-4">
             <ul id="names">
               <li>Name1</li>
               <li>Name2</li>
             </ul>
           </div>
-        </div>
       </div>
       <div class="row">
-        <form action="">
-          <input id="m" autocomplete="off" />
-          <button>Send</button>
-        </form>
+        <div class="col-lg-6">
+          <form action="">
+            <div class="input-group mb-3">
+              <input id="m" autocomplete="off" type="text" class="form-control" placeholder="Message..." aria-label="Message..." aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Send</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-    
-    
-    <!--<button>Send</button> -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-        $(function () {
-            var socket = io();
-            $('form').submit(function(){
-                socket.emit('chat message', $('#m').val());
-                $('#m').val('');
-                return false;
-            });
-            socket.on('chat message', function(msg){
-                $('#messages').append($('<li>').text(msg));
-            });
-            
-            //socket.on('connect', function)
+
+    <!-- <script src="server.js"> -->
+    <script> 
+        // How to connect to server 
+        //const socket = io.connect('http://localhost:3000');
+        const socket = io();
+        
+        // When submit happens for the form
+        // Send a message
+        $('form').submit(() => {
+          // Take input from m
+          socket.emit('message', $('#m').val());
+          $('#m').val('');  // empty form
+          return false;
         });
+
+        // some events reserved by API
+        socket.on('connect', () => {
+          // emitting to everybody
+          socket.emit('message', 'user connected');
+        })
+
+        // Wait for a message - can be for connect, disconnect, or sending a message
+        socket.on('message', (msg) => {
+          // changing the messages ul; put message in
+          $('#messages').append($('<li>').text(msg));
+        })
     </script>
   </body>
 </html>

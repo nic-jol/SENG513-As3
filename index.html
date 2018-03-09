@@ -10,6 +10,13 @@
     crossorigin="anonymous">
 
   <style>
+    body {
+      /*background-image: url(http://www.publicdomainpictures.net/pictures/60000/velka/damask-pattern-background-purple.jpg);*/
+      background-color: rgb(12, 0, 0);
+      color: #dddddd;
+      min-height: 0px;
+    }
+
     form {
       padding: 20px;
       position: fixed;
@@ -18,11 +25,51 @@
       padding-right: 50px;
     }
 
+    #messColumn {
+      max-height: 83vh;
+      min-height: 83vh;
+      /*line-height: 500px;*/
+      /*background-color: #efc6ed; */
+      background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);
+      border: 5px inset rgb(172, 99, 168);/* #ff3200;*/
+      border-radius: 5px;
+    }
+
+    #nameColumn {
+      max-height: 83vh;
+      min-height: 83vh;
+      /*height: 500px;
+      /*line-height: 500px;*/
+      /*background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);*/
+      /*background-color: rgb(17, 2, 0);*/
+      /*background: linear-gradient(to bottom right, rgb(17, 2, 0), rgb(63, 36, 71));*/
+      background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);
+      border: 5px inset rgb(172, 99, 168);
+      border-radius: 5px;
+      
+    }
+
     #messages {
       list-style-type: none;
       margin: 0;
       padding: 0;
       width: 100%;
+    }
+
+    ul {
+      overflow-y: auto;
+      overflow: auto;
+      max-height: 81vh;
+      min-height: 81vh;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-end;
+      /*
+      flex-direction: column;
+      align-content: flex-end;
+      justify-content: space-between;
+      /*vertical-align: bottom;*/
     }
 
     #messages li {
@@ -53,17 +100,21 @@
         </div>
       </div>
       <div class="col-sm-4">
-          <div class="text-center">
-            <p>Current Users:</p>
-          </div>
+        <div class="text-center">
+          <p>Current Users:</p>
         </div>
+      </div>
     </div>
     <div class="row">
       <div class="col-sm-8">
-        <ul id="messages"></ul>
+        <div id="messColumn" class="col-sm-12">
+          <ul id="messages"></ul>
+        </div>
       </div>
       <div class="col-sm-4">
-        <ul id="names"></ul>
+        <div id="nameColumn" class="col-sm-12">
+          <ul id="names"></ul>
+        </div>
       </div>
     </div>
     <div class="row">

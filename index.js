@@ -10,8 +10,9 @@ var io = require('socket.io')(server);    // running with server just created
 const port = 3000;    // Port constant used throughout
 
 // Users object
-var allUsers = {};   // store all the user names & colors
-//key = username; value = color
+var allUsers = {};   // store all the user names & colors    //key = username; value = color
+let allMessages = [];    // Store all messages for when others later join
+
 
 const colors = ["Aqua", "Blue", "BlueViolet", "Brown", "Coral", "CornflowerBlue", "Crimson", "DarkGoldenRod", "DarkGrey", "DarkGreen", "DarkMagenta", "DeepPink", "Gold", "LightGreen"]; // 14 elem
 const name1 = ["crazy", "docile", "mellow", "hyper", "chipper", "goofy", "haughty", "envious", "cute", "hungry"]; //10 elem
@@ -33,21 +34,6 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
-// Listen on the connection event for incoming sockets and I log it to the console
-/*
-io.on('connection', function(socket){
-    
-  socket.on('chat message', function(msg){
-    // Add time stamp
-
-    // Add nickname
-    
-      
-    io.emit('chat message', msg);
-    
-  });
-});
-*/
 // Event: connection
 io.on('connection', function (socket) {
     console.log("user connected");
@@ -91,8 +77,8 @@ io.on('connection', function (socket) {
 
         //console.log(genName);
         //console.log(genColor);
-        console.log("New User: ");
-        console.log(user);
+        console.log("New User: " + user);
+        //console.log(user);
         //console.log(allUsers);
 
 
@@ -123,13 +109,18 @@ io.on('connection', function (socket) {
 
             if ((possibleRequest.length > 1) && !(possibleRequest[1].trim() in allUsers)) { // Make sure there is a name to change it to and that there isn't already a user with that name
                 user["name"] = possibleRequest[1].trim();
-                console.log(user);
+                //console.log(user);
 
                 // Just sender
                 socket.emit('message', ("<li><b>" + rightTime + " You have successfully changed your name from " + oldname + " to " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "." + "</b></li>"));
 
                 // All but sender
-                socket.broadcast.emit('message', ("<li>" + rightTime + " " + oldname + " changed their name to " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "." + "</li>"));
+                let newMsg = ("<li>" + rightTime + " " + oldname + " changed their name to " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "." + "</li>");
+
+                allMessages.push(newMsg);// Add to all messages
+                socket.broadcast.emit('message', newMsg);   // Send to everyone else
+
+                console.log("All Messages: " + allMessages);
 
                 // TODO: remove old name from list and add to allUsers
                 // Add name to global users array
@@ -147,6 +138,7 @@ io.on('connection', function (socket) {
             else {
                 // Just sender
                 socket.emit('message', ("<li><b>" + rightTime + " Your attempt to change your name was unsuccessful."  + "</b></li>"));
+                console.log("Request failed");
             }
 
         }
@@ -154,45 +146,71 @@ io.on('connection', function (socket) {
             console.log("change color request");
             if ((possibleRequest.length > 1) && (possibleRequest[1].length == 6) && (all0ToF(possibleRequest[1]))) {
                 user["color"] = "#" + possibleRequest[1].trim();
-                console.log(user);
+                //console.log(user);
 
                 // Just sender
                 socket.emit('message', ("<li><b>" + rightTime + " Color change was successful, " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "." + "</b></li>"));
 
                 // All but sender
-                socket.broadcast.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " changed color." + "</li>"));
+                let newMsg = ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " changed color." + "</li>");
 
-                // TODO: separate self and others
-                //io.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " changed color." + "</li>"));
+                allMessages.push(newMsg);// Add to all messages
+                socket.broadcast.emit('message', newMsg);   // Send to everyone else
+
+                console.log("All Messages: " + allMessages);
             }
             else {
                 // Just sender
                 socket.emit('message', ("<li><b>" + rightTime + " Your attempt to change the color of your name was unsuccessful."  + "</b></li>"));
+
+                console.log("Request failed");
             }
 
         }
         else {
-            console.log(`message ${msg}`);
+            //console.log(`message ${msg}`);
 
             if (msg == "user connected") {
                 // Just sender
+                /*
                 socket.emit('message', ("<li><b>" + rightTime + " You have joined the chat room as " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "</b></li>"));
+                */
 
                 // All but sender
-                socket.broadcast.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " has entered the chat room." + "</li>"));
+                let newMsg = ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " has entered the chat room." + "</li>");
+
+                allMessages.push(newMsg);   // Add to all messages
+                socket.broadcast.emit('message', newMsg);    // Send to everyone
+
+                console.log("All Messages: " + allMessages);                
             }
             else {
                 // Just sender
                 socket.emit('message', ("<li><b>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + ": " + msg + "</b></li>"));
 
                 // All but sender
-                socket.broadcast.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + ": " + msg + "</li>"));
+                let newMsg = ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + ": " + msg + "</li>");
+                
+                allMessages.push(newMsg);   // Add to all messages
+                socket.broadcast.emit('message', newMsg);
+
+                console.log("All Messages: " + allMessages);
             }
-
-
-
-            //io.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + ": " + msg + "</li>"));
         }
+    });
+
+    socket.on('loadAllMsgs', () => {
+        // timestamp
+        let fullDate = Date().split(" ");
+        let withSeconds = fullDate[4].split(':');
+        let rightTime = withSeconds[0] + ":" + withSeconds[1];
+
+        for (let i=0; i<(allMessages.length-1); i++) {
+            // Just to sender
+            socket.emit('message', allMessages[i]);
+        }
+        // Show that they connected too
+        socket.emit('message', ("<li><b>" + rightTime + " You have joined the chat room as " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + "</b></li>"));
     });
 
     socket.on('disconnect', () => {
@@ -201,15 +219,19 @@ io.on('connection', function (socket) {
         let withSeconds = fullDate[4].split(':');
         let rightTime = withSeconds[0] + ":" + withSeconds[1];
 
+        console.log("user " + user["name"] +" disconnected");
+
         // Remove nickname from allUsers
         delete allUsers[user["name"]]; 
 
         // Update user list
         updateUserList();
+        
+        // Update everyone
+        let newMsg = ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " has left the chat room." + "</li>");
 
-        // Better message
-        console.log("user disconnected");
-        io.emit('message', ("<li>" + rightTime + " " + "<span style=\"color: " + user["color"] + ";\">" + user["name"] + "</span>" + " has left the chat room." + "</li>"));
+        allMessages.push(newMsg);   // Add to all messages
+        io.emit('message', newMsg);
     })
 
 });
@@ -236,17 +258,3 @@ function updateUserList() {
     console.log(strUsers);
     io.emit('updateUsers', strUsers);
 }
-
-
-/*    
-    // Send to all
-    console.log('a user connected');
-    
-    // Create object for each user
-    
-    socket.on('disconnect', function(){
-        // Send to all
-        console.log('user disconnected');
-    });
-});
-*/

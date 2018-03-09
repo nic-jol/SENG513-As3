@@ -31,10 +31,11 @@
       /*line-height: 500px;*/
       /*background-color: #efc6ed; */
       background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);
-      border: 5px inset rgb(172, 99, 168);/* #ff3200;*/
+      border: 5px inset rgb(172, 99, 168);
+      /* #ff3200;*/
       border-radius: 5px;
       overflow-y: auto;
-      
+
     }
 
     #nameColumn {
@@ -56,7 +57,7 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      overflow-y: auto;
+      /*overflow-y: auto; */
     }
 
     ul {
@@ -67,6 +68,7 @@
       flex: 1;
       flex-direction: column;
       justify-content: flex-end;
+      flex-wrap: wrap;
       /*
       flex-direction: column;
       align-content: flex-end;
@@ -76,14 +78,14 @@
 
     #messages li {
       padding: 5px 10px;
-      /*overflow-y: auto;*/
+      word-wrap: break-word;
     }
 
     #names {
       margin: 0;
       padding: 0;
       list-style-type: none;
-      overflow-y: auto;
+      /*overflow-y: auto;*/
     }
 
     p {
@@ -122,7 +124,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-sm-12">
         <form action="">
           <div class="input-group mb-3">
             <input id="m" autocomplete="off" type="text" class="form-control" placeholder="Message..." aria-label="Message..." aria-describedby="basic-addon2">
@@ -149,6 +151,11 @@
     // How to connect to server 
     //const socket = io.connect('http://localhost:3000');
     const socket = io();
+
+    window.addEventListener("load", function() {
+      $('#messages').empty(); 
+      socket.emit('loadAllMsgs');
+    });
 
     // When submit happens for the form
     // Send a message

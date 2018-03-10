@@ -11,7 +11,6 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
-
   <style>
     body {
       background-color: rgb(12, 0, 0);
@@ -56,7 +55,6 @@
     }
 
     ul {
-      /*overflow-y: auto;*/
       min-height: 80vh;
       display: flex;
       flex: 1;
@@ -134,10 +132,8 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
-  <!-- <script src="server.js"> -->
   <script> 
     // How to connect to server 
-    //const socket = io.connect('http://localhost:3000');
     const socket = io();
 
     var element = document.getElementById("messages");
@@ -145,20 +141,16 @@
 
     window.addEventListener("load", function () {
       $('#messages').empty();
-      //socket.emit('loadAllMsgs');
     });
 
-    
+
 
     // When submit happens for the form
     // Send a message
-    
     $('form').submit(() => {
       // Take input from m
       socket.emit('message', $('#m').val());
       $('#m').val('');  // empty form
-      
-      //$("#messages").scrollTop($("#messages").height());
       return false;
     });
 
@@ -173,13 +165,9 @@
     // Wait for a message - can be for connect, disconnect, or sending a message
     socket.on('message', (msg) => {
       // changing the messages ul; put message in
-      //console.log("\nmessage:");
-      //console.log(msg);
-      //console.log("\n");
-      //$('#messages').append($('<li>').html(msg));
       $('#messages').append(msg);
-      
-      $("#messColumn").scrollTop( $("#messColumn")[0].scrollHeight);
+
+      $("#messColumn").scrollTop($("#messColumn")[0].scrollHeight);
     });
 
     socket.on('updateUsers', (msg) => {

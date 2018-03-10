@@ -14,7 +14,6 @@
 
   <style>
     body {
-      /*background-image: url(purple-stripes.jpg);*/
       background-color: rgb(12, 0, 0);
       color: #dddddd;
       min-height: 0px;
@@ -31,12 +30,9 @@
     #messColumn {
       max-height: 83vh;
       min-height: 83vh;
-      /*line-height: 500px;*/
-      /*background-color: #efc6ed; */
-      background-image: url(https://i.imgur.com/JTd15JL.jpg);
-      background-size: cover;	     
+      background-image: url(https://i.imgur.com/FodiBKY.jpg);
+      background-size: cover;
       border: 5px inset rgb(172, 99, 168);
-      /* #ff3200;*/
       border-radius: 5px;
       overflow-y: auto;
 
@@ -45,12 +41,7 @@
     #nameColumn {
       max-height: 83vh;
       min-height: 83vh;
-      /*height: 500px;
-      /*line-height: 500px;*/
-      /*background-image: url(https://cdn.pixabay.com/photo/2016/10/18/20/32/texture-1751332_960_720.jpg);*/
-      /*background-color: rgb(17, 2, 0);*/
-      /*background: linear-gradient(to bottom right, rgb(40, 17, 33), rgb(196, 136, 187));*/
-      background-image: url(https://i.imgur.com/JTd15JL.jpg);
+      background-image: url(https://i.imgur.com/FodiBKY.jpg);
       background-size: cover;
       border: 5px inset rgb(172, 99, 168);
       border-radius: 5px;
@@ -62,23 +53,16 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      /*overflow-y: auto; */
     }
 
     ul {
-      overflow-y: auto;
-      /*max-height: 81vh;*/
-      min-height: 81vh;
+      /*overflow-y: auto;*/
+      min-height: 80vh;
       display: flex;
       flex: 1;
       flex-direction: column;
       justify-content: flex-end;
       flex-wrap: wrap;
-      /*
-      flex-direction: column;
-      align-content: flex-end;
-      justify-content: space-between;
-      /*vertical-align: bottom;*/
     }
 
     #messages li {
@@ -90,7 +74,6 @@
       margin: 0;
       padding: 0;
       list-style-type: none;
-      /*overflow-y: auto;*/
     }
 
     p {
@@ -157,17 +140,25 @@
     //const socket = io.connect('http://localhost:3000');
     const socket = io();
 
-    window.addEventListener("load", function() {
-      $('#messages').empty(); 
-      socket.emit('loadAllMsgs');
+    var element = document.getElementById("messages");
+    element.scrollTop = element.scrollHeight;
+
+    window.addEventListener("load", function () {
+      $('#messages').empty();
+      //socket.emit('loadAllMsgs');
     });
+
+    
 
     // When submit happens for the form
     // Send a message
+    
     $('form').submit(() => {
       // Take input from m
       socket.emit('message', $('#m').val());
       $('#m').val('');  // empty form
+      
+      //$("#messages").scrollTop($("#messages").height());
       return false;
     });
 
@@ -175,6 +166,8 @@
     socket.on('connect', () => {
       // emitting to everybody
       socket.emit('message', 'user connected');
+
+      socket.emit('getForCookies', '');
     });
 
     // Wait for a message - can be for connect, disconnect, or sending a message
@@ -185,6 +178,8 @@
       //console.log("\n");
       //$('#messages').append($('<li>').html(msg));
       $('#messages').append(msg);
+      
+      $("#messColumn").scrollTop( $("#messColumn")[0].scrollHeight);
     });
 
     socket.on('updateUsers', (msg) => {
@@ -200,6 +195,25 @@
       document.getElementById('username').innerText = msg;
 
       console.log(msg);
+    });
+
+    socket.on('setCookies', (dataForCookies) => {
+      document.cookie = dataForCookies;
+
+      console.log("set cookie: " + dataForCookies);
+    });
+
+    socket.on('getCookies', () => {
+      let cookieValue = document.cookie;
+      console.log("cookieValue: " + cookieValue);
+
+      if (cookieValue == "") {
+        cookieValue = ":::";
+      }
+
+      console.log("cookieValue: " + cookieValue);
+
+      socket.emit('getCookies', cookieValue);
     });
 
   </script>

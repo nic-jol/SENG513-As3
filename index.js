@@ -81,8 +81,8 @@ io.on('connection', function (socket) {
                 updateUserList();
 
                 // Create cookie
-                let cookieStr = "current=name:" + user["name"] + ":color:" + user["color"];
-                socket.emit('setCookies', cookieStr);
+                //let cookieStr = "current=name:" + user["name"] + ":color:" + user["color"];
+                //socket.emit('setCookies', cookieStr);
 
                 // Display username
                 socket.emit('displayUsername', ("You are " + user["name"]));
@@ -109,8 +109,8 @@ io.on('connection', function (socket) {
                 socket.broadcast.emit('message', newMsg);   // Send to everyone else
 
                 // Create cookie
-                let cookieStr = "current=name:" + user["name"] + ":color:" + user["color"];
-                socket.emit('setCookies', cookieStr);
+                //let cookieStr = "current=name:" + user["name"] + ":color:" + user["color"];
+                //socket.emit('setCookies', cookieStr);
             }
             else {
                 // Just sender
@@ -149,13 +149,13 @@ io.on('connection', function (socket) {
     });
 
     socket.on('getCookies', (cookies) => {
-        console.log("Got Cookie: " + cookies);
-        cookies = cookies.split(":");
-        user["name"] = cookies[1];
-        user["color"] = cookies[3];
-        console.log("set name and color: " + user["name"] + user["color"]);
+        //console.log("Got Cookie: " + cookies);
+        //cookies = cookies.split(":");
+        //user["name"] = cookies[1];
+        //user["color"] = cookies[3];
+        //console.log("set name and color: " + user["name"] + user["color"]);
 
-        if ((user["name"] == "") || (user["color"] == "")) {
+        //if ((user["name"] == "") || (user["color"] == "")) {
             // Or randomly generate
             // Generate name
             let genName = "";
@@ -183,12 +183,12 @@ io.on('connection', function (socket) {
             console.log("New User: " + user["name"]);
 
             // Create cookie
-            let cookieStr = "current=name:" + user["name"] + ":color:" + user["color"];
-            socket.emit('setCookies', cookieStr);
-        }
-        else {
-            allUsers[user["name"]] = user["color"];
-        }
+            //let cookieStr = "current=name:" + user["name"] + ":color:" + user["color"];
+            //socket.emit('setCookies', cookieStr);
+        //}
+        //else {
+          //  allUsers[user["name"]] = user["color"];
+        //}
 
         // Update user list
         updateUserList();
